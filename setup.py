@@ -10,7 +10,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="holidata",
-    version="2024.6.0",
+    version="2024.8.3",
     description="Holidata is a utility for algorithmically producing holidays for a given locale and year",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -25,6 +25,7 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3 :: Only",
     ],
     keywords="holiday, calendar",
@@ -39,7 +40,7 @@ setup(
     extras_require={
         "test": [
             "pytest >= 7.4.2",
-            "snapshottest >= 0.6.0",
+            "syrupy >= 4.6.1",
         ]
     },
     scripts=["bin/holidata"],

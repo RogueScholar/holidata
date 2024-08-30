@@ -1,5 +1,20 @@
+2024.8.3
+- #112 Add locale en-AU
+       (thanks to Alex Smith)
+
+2024.8.2
+- #113 Fix emitter output
+
+2024.8.1
+- #111 Refactor core classes, replace date parsing and custom date functions with DSL
+- #110 Test holidays are only defined for valid regions
+- #109 Enable holidata to be calculated outside confirmed range
+
+2024.8.0
+-      Add support for Python 3.12, replace 'snapshottest' with 'syrupy'
 - #105 Holiday "Mariä Himmelfahrt" missing for region 'BY' in locale 'de-DE'
        (thanks to Alexei Samokvalov)
+-      Convert DE into module
 
 2024.6.0
 - #102 Fix error in calculation of 'Day after Thanksgiving'

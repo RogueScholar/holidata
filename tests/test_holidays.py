@@ -38,6 +38,14 @@ def country(request):
     return request.param()
 
 
+@pytest.fixture()
+def regions(locale):
+    try:
+        return [region.id for region in locale.country.regions]
+    except AttributeError:
+        return []
+
+
 def test_country_should_be_constructable(country):
     pass
 
@@ -59,8 +67,8 @@ def test_holiday_should_be_of_type_either_fixed_or_variable(holidays):
         date_is_fixed = "F" in holiday.flags
         date_is_variable = "V" in holiday.flags
 
-        assert not (date_is_variable and date_is_fixed), f"Holiday '{holiday.description}' ({holiday.date.strftime('%Y-%m-%d')}) in locale {holiday.locale} must not have both flags 'F' and 'V'"
-        assert (date_is_variable or date_is_fixed), f"Holiday '{holiday.description}' ({holiday.date.strftime('%Y-%m-%d')}) in locale {holiday.locale} must have either flag 'F' or 'V'"
+        assert not (date_is_variable and date_is_fixed), f"Holiday '{holiday.description}' ({holiday.date.strftime('%Y-%m-%d')}) in locale {holiday.locale} must not have both flags 'F' and 'V' (has '{holiday.flags}')"
+        assert (date_is_variable or date_is_fixed), f"Holiday '{holiday.description}' ({holiday.date.strftime('%Y-%m-%d')}) in locale {holiday.locale} must have either flag 'F' or 'V' (has '{holiday.flags}')"
 
 
 def test_holiday_flags_should_be_in_the_correct_order(holidays):
@@ -68,3 +76,11 @@ def test_holiday_flags_should_be_in_the_correct_order(holidays):
         match = re.search(r"^N?R?[FV]?$", f"{holiday.flags}")
 
         assert match is not None, f"Flags for holiday '{holiday.description}' ({holiday.date.strftime('%Y-%m-%d')}) in locale {holiday.locale} are not in the correct order. Flags '{holiday.flags}' should match 'N?R?[FV]?'"
+
+
+def test_holiday_should_only_be_defined_for_valid_regions(holidays, regions):
+    if regions is None or regions == []:
+        return
+
+    for holiday in holidays:
+        assert holiday.region == "" or holiday.region in regions, "Holiday '{}' ({}) in locale {} is defined for unknown region '{}'".format(holiday.description, holiday.date.strftime("%Y-%m-%d"), holiday.locale, holiday.region)

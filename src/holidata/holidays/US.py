@@ -1,17 +1,13 @@
 from dateutil.easter import EASTER_WESTERN
 
-from holidata.utils import month_reference
-from .holidays import Country
+from holidata.holiday import Country
+from holidata.utils import first, third, last, second, fourth, day
 
 
 class US(Country):
     id = "US"
     languages = ["en", "es"]
     default_lang = "en"
-    regions = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY",
-               "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND",
-               "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", "DC",
-               "AS", "GU", "MP", "PR", "UM", "VI"]
     easter_type = EASTER_WESTERN
 
     def __init__(self):
@@ -22,7 +18,7 @@ class US(Country):
                 "en": "New Year's Day",
                 "es": "Año Neuvo",
             }) \
-            .on("01-01") \
+            .on(month=1, day=1) \
             .with_flags("NF")
 
         self.define_holiday() \
@@ -30,7 +26,7 @@ class US(Country):
                 "en": "Independence Day",
                 "es": "Día de la Independiencia",
             }) \
-            .on("07-04") \
+            .on(month=7, day=4) \
             .with_flags("NF")
 
         self.define_holiday() \
@@ -38,7 +34,7 @@ class US(Country):
                 "en": "Veterans Day",
                 "es": "Día de los Veteranos",
             }) \
-            .on("11-11") \
+            .on(month=11, day=11) \
             .with_flags("NF")
 
         self.define_holiday() \
@@ -46,7 +42,7 @@ class US(Country):
                 "en": "Christmas Eve",
                 "es": "Nochebuena",
             }) \
-            .on("12-24") \
+            .on(month=12, day=24) \
             .with_flags("NRF")
 
         self.define_holiday() \
@@ -54,7 +50,7 @@ class US(Country):
                 "en": "Christmas Day",
                 "es": "Navidad",
             }) \
-            .on("12-25") \
+            .on(month=12, day=25) \
             .with_flags("NRF")
 
         self.define_holiday() \
@@ -62,7 +58,7 @@ class US(Country):
                 "en": "Birthday of Martin Luther King, Jr.",
                 "es": "Cumpleaños de Martin Luther King, Jr.",
             }) \
-            .on("3. monday in January") \
+            .on(third("monday").of("January")) \
             .with_flags("NV")
 
         self.define_holiday() \
@@ -70,7 +66,7 @@ class US(Country):
                 "en": "Washington's Birthday",
                 "es": "Día del Presidente",
             }) \
-            .on("3. monday in February") \
+            .on(third("monday").of("february")) \
             .with_flags("NV")
 
         self.define_holiday() \
@@ -79,7 +75,7 @@ class US(Country):
                 "es": "Día del Patriota",
                 }) \
             .in_regions(["MA", "ME"]) \
-            .on("3. monday in April") \
+            .on(third("monday").of("april")) \
             .with_flags("V")
 
         self.define_holiday() \
@@ -87,7 +83,7 @@ class US(Country):
                 "en": "Memorial Day",
                 "es": "Día de los Caídos",
             }) \
-            .on("1. last monday in May") \
+            .on(last("monday").of("may")) \
             .with_flags("NV")
 
         self.define_holiday() \
@@ -95,7 +91,7 @@ class US(Country):
                 "en": "Labor Day",
                 "es": "Día del Trabajo",
             }) \
-            .on("1. monday in September") \
+            .on(first("monday").of("september")) \
             .with_flags("NV")
 
         self.define_holiday() \
@@ -103,7 +99,7 @@ class US(Country):
                 "en": "Columbus Day",
                 "es": "Día de Columbus",
             }) \
-            .on("2. monday in October") \
+            .on(second("monday").of("october")) \
             .with_flags("NV")
 
         self.define_holiday() \
@@ -111,7 +107,7 @@ class US(Country):
                 "en": "Thanksgiving Day",
                 "es": "Día de Acción de Gracias",
             }) \
-            .on("4. thursday in November") \
+            .on(fourth("thursday").of("november")) \
             .with_flags("NV")
 
         self.define_holiday() \
@@ -119,17 +115,5 @@ class US(Country):
                 "en": "Day after Thanksgiving",
                 "es": "Día después de Acción de Gracias",
             }) \
-            .on(self.day_after_thanksgiving) \
+            .on(day(1).after(fourth("thursday").of("november"))) \
             .with_flags("NV")
-
-    @staticmethod
-    def day_after_thanksgiving(year):
-        date = month_reference(year, "november").shift_to_weekday(
-            "thursday",
-            order=4,
-            reverse=False,
-            including=True,
-        )
-
-        return date.shift(days=1)
-
